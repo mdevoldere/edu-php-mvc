@@ -1,0 +1,26 @@
+{
+    "name": "mdevoldere/edu-php-mvc",
+    "description": "A simple MVC for educationnal purposes",
+    "type": "library",
+    "version": "0.0.1",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "MDevoldere",
+            "email": "dev@devoldere.net",
+            "homepage": "https://devoldere.net",
+            "role": "Owner"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/mdevoldere/MD_PHP_MVC"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php" : ">=7.4",
+        "ext-mbstring": "*"
+    }
+}
