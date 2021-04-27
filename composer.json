@@ -3,6 +3,7 @@
     "description": "A simple MVC for educationnal purposes",
     "type": "library",
     "version": "0.0.1",
+    "minimum-stability": "dev",
     "license": "GPL-3.0-or-later",
     "authors": [
         {
@@ -18,9 +19,13 @@
             "url": "https://github.com/mdevoldere/MD_PHP_MVC"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
         "php" : ">=7.4",
         "ext-mbstring": "*"
-    }
+    },
+    "autoload": {
+        "psr-4": {
+          "MD\\": "MD"
+        }
+      }
 }
