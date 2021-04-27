@@ -1,6 +1,6 @@
 <?php
 
-namespace MD\Db;
+namespace Md\Db;
 
 use PDO;
 use PdoStatement;

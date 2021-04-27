@@ -1,6 +1,6 @@
 <?php 
 
-namespace MD\Http; 
+namespace Md\Http; 
 
 /**
  * Http/Request represents the current HTTP Query

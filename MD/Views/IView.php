@@ -1,6 +1,6 @@
 <?php 
 
-namespace MD\Views;
+namespace Md\Views;
 
 interface IView 
 {

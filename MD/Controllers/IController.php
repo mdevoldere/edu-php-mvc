@@ -1,9 +1,9 @@
 <?php 
 
-namespace MD\Controllers;
+namespace Md\Controllers;
 
 
-use MD\Http\IResponse;
+use Md\Http\IResponse;
 
 
 interface IController 

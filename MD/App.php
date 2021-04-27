@@ -1,10 +1,10 @@
 <?php 
 
-namespace MD;
+namespace Md;
 
-use MD\Controllers\IController;
-use MD\Http\Http;
-use MD\Http\IRouter;
+use Md\Controllers\IController;
+use Md\Http\Http;
+use Md\Http\IRouter;
 
 /**
  * MD MVC App Launcher

@@ -1,8 +1,8 @@
 <?php 
 
-namespace MD\Controllers;
+namespace Md\Controllers;
 
-use MD\Db\Repository;
+use Md\Db\Repository;
 
 abstract class ApiController extends Controller
 {

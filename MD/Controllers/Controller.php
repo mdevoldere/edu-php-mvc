@@ -1,14 +1,14 @@
 <?php 
 
-namespace MD\Controllers;
+namespace Md\Controllers;
 
-use MD\Db\IRepository;
-use MD\Db\Repository;
-use MD\Http\IRequest;
-use MD\Http\IResponse;
-use MD\Http\IRouter;
-use MD\Http\Response;
-use MD\Views\View;
+use Md\Db\IRepository;
+use Md\Db\Repository;
+use Md\Http\IRequest;
+use Md\Http\IResponse;
+use Md\Http\IRouter;
+use Md\Http\Response;
+use Md\Views\View;
 
 abstract class Controller implements IController
 {

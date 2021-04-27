@@ -1,6 +1,6 @@
 <?php 
 
-namespace MD\Http;
+namespace Md\Http;
 
 
 use function array_map, explode, preg_match, http_response_code;

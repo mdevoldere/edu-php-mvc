@@ -1,8 +1,8 @@
 <?php 
 
-namespace MD\Http;
+namespace Md\Http;
 
-use MD\Views\IView;
+use Md\Views\IView;
 
 interface IResponse 
 {

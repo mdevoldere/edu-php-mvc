@@ -1,6 +1,6 @@
 <?php 
 
-namespace MD\Db;
+namespace Md\Db;
 
 
 class Repository implements Irepository
@@ -12,7 +12,7 @@ class Repository implements Irepository
 
     protected string $dbContext;
 
-    public function __construct(string $_table, string $_pk, string $_dbContext = '\\MD\\Db\\DbContext')
+    public function __construct(string $_table, string $_pk, string $_dbContext = '\\Md\\Db\\DbContext')
     {
         $this->table = $_table;
         $this->pk = $_pk;

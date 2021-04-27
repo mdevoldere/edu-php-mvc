@@ -1,9 +1,9 @@
 <?php 
 
-namespace MD\Http;
+namespace Md\Http;
 
-use MD\Views\IView;
-use MD\Views\View;
+use Md\Views\IView;
+use Md\Views\View;
 
 use function json_encode;
 

@@ -1,8 +1,8 @@
 <?php 
 
-namespace MD\Http;
+namespace Md\Http;
 
-use MD\Controllers\IController;
+use Md\Controllers\IController;
 
 /**
  * Interface Irouter

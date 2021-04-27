@@ -1,8 +1,8 @@
 <?php
 
-namespace MD\Views;
+namespace Md\Views;
 
-use MD\Http\Http;
+use Md\Http\Http;
 
 class View implements IView
 {

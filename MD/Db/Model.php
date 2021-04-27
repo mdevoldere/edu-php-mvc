@@ -1,6 +1,6 @@
 <?php 
 
-namespace MD\Db;
+namespace Md\Db;
 
 use function array_key_exists;
 

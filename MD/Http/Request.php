@@ -1,6 +1,6 @@
 <?php 
 
-namespace MD\Http;
+namespace Md\Http;
 
 use function mb_convert_case, parse_str, file_get_contents, sprintf;
 

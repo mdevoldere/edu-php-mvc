@@ -1,6 +1,6 @@
 <?php
 
-namespace MD;
+namespace Md;
 
 /**
  * MDClass AutoLoader
@@ -20,7 +20,7 @@ abstract class Loader
 {
     /**
      * Get local path from class name
-     * ex: \MD\MyNamespace\MyClass --> RootPath/MD/MyNamespace/MyClass.php 
+     * ex: \Md\MyNamespace\MyClass --> RootPath/MD/MyNamespace/MyClass.php 
      * @param string $_classname the class full name
      * @return string|null the class local path or null if file not exists
      */
@@ -50,7 +50,7 @@ abstract class Loader
 
     /**
      * Register this Loader in PHP autoloading stack
-     * Required before use \MD\* classes
+     * Required before use \Md\* classes
      */
     static public function register()
     {
@@ -58,7 +58,7 @@ abstract class Loader
         \define('MD', (dirname(__DIR__) . DIRECTORY_SEPARATOR));
 
         /** register */
-        \spl_autoload_register('\\MD\\Loader::autoload');
+        \spl_autoload_register('\\Md\\Loader::autoload');
 
         // \set_error_handler('');
     }
@@ -66,4 +66,4 @@ abstract class Loader
 }
 
 // register this loader when loading this file
-\MD\Loader::register();
+\Md\Loader::register();

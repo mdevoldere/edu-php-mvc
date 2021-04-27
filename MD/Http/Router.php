@@ -1,9 +1,9 @@
 <?php 
 
-namespace MD\Http;
+namespace Md\Http;
 
-use MD\Controllers\IController;
-use MD\Loader;
+use Md\Controllers\IController;
+use Md\Loader;
 
 use function basename, str_replace, explode, trim, sprintf;
 
