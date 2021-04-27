@@ -17,10 +17,7 @@ use Md\Controllers\IController;
 interface IRouter 
 {
     public function getPath(): string;
-
     public function getViewPath(): string;
-
     public function getRequest(): IRequest;
-
     public function getController(): ?IController;
 }

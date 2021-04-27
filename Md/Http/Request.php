@@ -6,6 +6,7 @@ use function mb_convert_case, parse_str, file_get_contents, sprintf;
 
 class Request implements IRequest
 {
+    /** @var string $method HTTP Method */
     private string $method;
     private string $controller;
     private string $action;
@@ -13,6 +14,7 @@ class Request implements IRequest
 
     public function __construct(array $_route)
     {
+        $_route = Http::secure($_route);
         $this->method = mb_convert_case($_SERVER['REQUEST_METHOD'] ?? 'get', MB_CASE_LOWER);
         $this->controller = mb_convert_case($_route[0] ?? 'home', MB_CASE_TITLE);
         $this->action = mb_convert_case($_route[1] ?? 'index', MB_CASE_LOWER);

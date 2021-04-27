@@ -5,11 +5,12 @@ namespace Md\Http;
 /**
  * Http/Request represents the current HTTP Query
  * 
- * @method getMethod()
- * @method getRoute()
- * @method getController()
- * @method getAction()
- * @method getId()
+ * @method string getMethod()
+ * @method string getRoute()
+ * @method array getData()
+ * @method string getController()
+ * @method string getAction()
+ * @method null|string getId()
  */
 interface IRequest 
 {
