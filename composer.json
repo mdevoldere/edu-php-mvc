@@ -16,7 +16,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/mdevoldere/MD_PHP_MVC"
+            "url": "https://github.com/mdevoldere/edu-php-mvc.git"
         }
     ],
     "require": {
