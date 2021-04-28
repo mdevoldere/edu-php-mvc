@@ -58,7 +58,7 @@ class Response implements IResponse
 
     public function setData(array $_data = []): IResponse
     {
-        $this->data[] = $_data;
+        $this->data = $_data;
         return $this;
     }
 
