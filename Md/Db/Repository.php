@@ -2,6 +2,7 @@
 
 namespace Md\Db;
 
+use function basename;
 
 class Repository implements Irepository
 {
@@ -10,33 +11,37 @@ class Repository implements Irepository
 
     public string $pk;
 
-    protected string $dbContext;
+    protected IDbContext $db;
 
-    public function __construct(string $_table, string $_pk, string $_dbContext = '\\Md\\Db\\DbContext')
+    public function __construct(string $_table, string $_pk, string $_dbContext = 'default')
     {
         $this->table = $_table;
         $this->pk = $_pk;
-        $this->dbContext = $_dbContext;
+        $this->db = DbContext::getContext($_dbContext);
+
+        if(empty($this->db)) {
+            exit('Repository Error 1 ('.$_dbContext.')');
+        }
     }
 
     public function exists($_id): bool
     {
-        return $this->dbContext::fetch("SELECT COUNT(*) as nb FROM " . $this->table . " WHERE " . $this->pk . "=:cond;", [':cond' => $_id], false)['nb'] > 0;
+        return $this->db->fetch("SELECT COUNT(*) as nb FROM " . $this->table . " WHERE " . $this->pk . "=:cond;", [':cond' => $_id], false)['nb'] > 0;
     }
 
     public function count(): int
     {
-        return $this->dbContext::query(("SELECT COUNT(*) as nb FROM " . $this->table . ";"), false)['nb'];
+        return $this->db->query(("SELECT COUNT(*) as nb FROM " . $this->table . ";"), false)['nb'];
     }
 
     public function getAll(): array
     {
-        return $this->dbContext::query(("SELECT * FROM " . $this->table . ";"), true);
+        return $this->db->query(("SELECT * FROM " . $this->table . ";"), true);
     }
 
     public function getBy(string $_col, string $_value, bool $_all = false) : array
     {
-        return $this->dbContext::fetch("SELECT * FROM " . $this->table . " WHERE " . \basename($_col) . "=:cond;", [':cond' => $_value], $_all);
+        return $this->db->fetch("SELECT * FROM " . $this->table . " WHERE " . basename($_col) . "=:cond;", [':cond' => $_value], $_all);
     }
 
     public function getById($_id): array

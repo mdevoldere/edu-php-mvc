@@ -10,14 +10,21 @@ use Md\Http\IRouter;
 use Md\Http\Response;
 use Md\Views\View;
 
+/**
+ * Abstract Class Controller
+ */
 abstract class Controller implements IController
 {
+    /** @var IRouter $router The router used by current App */
     protected IRouter $router; 
 
+    /** @var IRequest $request The HTTP request extracted from $router */
     protected IRequest $request;
 
+    /** @var IResponse $response The HTTP response object */
     protected IResponse $response;
 
+    /** @var null|IRepository $repo The Repository to use or null if no repository */
     protected ?IRepository $repo;
 
     protected bool $view;
@@ -58,6 +65,10 @@ abstract class Controller implements IController
         return $this->response;
     }
 
+    /**
+     * Set Generic Repository from table name and primary key name 
+     * Remember to open the connection with DbContext before use any repo
+     */
     public function setRepository(string $_table, string $_pk)
     {
         $this->repo = new Repository($_table, $_pk);
