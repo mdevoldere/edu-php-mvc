@@ -49,4 +49,13 @@ interface IRequest
      * @return string the value provided to the method invoked in Controller
      */
     public function getId(): ?string;
+
+    /**
+     * Get View relative path
+     * ex: 
+     * - request is /users/profile/23
+     * - view = users/profile
+     * @return string the view relative path
+     */
+    public function getView(): string;
 }

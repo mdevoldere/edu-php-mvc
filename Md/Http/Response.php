@@ -53,7 +53,6 @@ class Response implements IResponse
     public function getData(): array
     {
         return $this->data;
-        return $this;
     }
 
     public function setData(array $_data = []): IResponse
@@ -76,16 +75,10 @@ class Response implements IResponse
         return $this;
     }
 
-    public function setLayout(?IView $_view): IResponse
-    {
-        $this->view = $_view;
-        return $this;
-    }
-
-    public function setView(?IView $_view): IView
+    public function setView(?IView $_view): IResponse
     {
         $this->view = $_view;
         $this->contentType = ($_view !== null) ? IResponse::HTTP_HTML : IResponse::HTTP_JSON;
-        return $this->view;
+        return $this;
     }
 }

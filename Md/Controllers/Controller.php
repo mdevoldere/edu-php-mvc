@@ -27,6 +27,7 @@ abstract class Controller implements IController
     /** @var null|IRepository $repo The Repository to use or null if no repository */
     protected ?IRepository $repo;
 
+    /** @var bool $view defines if a view should be loaded (true) */
     protected bool $view;
 
     public function __construct(IRouter $_router)
@@ -58,9 +59,9 @@ abstract class Controller implements IController
             return $this->response;
         }
 
-        $layout = new View($this->router->getPath().'Views/'); 
+        $layout = new View($this->router->getViewsPath()); 
         $layout->setFile('_layout');
-        $layout->setChild('page', $this->router->getViewPath());    
+        $layout->setChild('page', $this->request->getView());  
         $this->response->setView($layout);    
         return $this->response;
     }

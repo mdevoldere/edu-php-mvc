@@ -3,6 +3,7 @@
 namespace Md;
 
 use Md\Controllers\IController;
+use Md\Db\DbContext;
 use Md\Http\Http;
 use Md\Http\IRouter;
 
@@ -19,7 +20,9 @@ class App
      * @param IRouter $_router the IRouter object to use
      */
     final static public function run(IRouter $_router): void
-    {
+    {   
+        self::handleDatabases($_router);
+
         if(null !== ($c = static::handleController($_router))) {
             Http::response($c->handleRequest());
         }
@@ -35,5 +38,17 @@ class App
     static protected function handleController(IRouter $_router): ?IController 
     {
         return $_router->getController();
+    }
+
+    static protected function handleDatabases(IRouter $_router) : void
+    {
+        $f = ($_router->getPath().'var/db.conf.php');
+
+        if(is_file($f)) {
+            $a = require $f;
+            foreach($a as $context => $params) {
+                DbContext::setContext($context, $params);
+            }
+        }
     }
 }

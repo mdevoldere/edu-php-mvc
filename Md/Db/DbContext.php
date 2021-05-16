@@ -23,7 +23,7 @@ class DbContext implements IDbContext
         return self::$context[$_context] ?? null;
     }
 
-    static public function setContext(array $c = [], string $_context = 'default'): ?IDbContext
+    static public function setContext(string $_context, array $c): ?IDbContext
     {
         try {
             
@@ -82,7 +82,8 @@ class DbContext implements IDbContext
     /** @var PDO $db Représente une connexion vers une base de données */
     protected ?PDO $pdo = null;
 
-    protected function __construct(PDO $_pdo) 
+
+    public function __construct(PDO $_pdo) 
     {
         $this->pdo = $_pdo;
     }  
@@ -154,29 +155,37 @@ class DbContext implements IDbContext
      * @param array|Db $_values Le tableau de valeurs correspondant à la table courante
      * @return int Le nombre de lignes affectées
      */
-    /*static public function insert(array $_values): int
+    public function insert(string $_table, array $_values): int
     {
         $cols = \array_keys($_values);
         $vals = (':' . \implode(', :', $cols));
         $cols = \implode(',', $cols);
 
-        return static::exec("INSERT INTO " . static::$tableName . " (" . $cols . ") VALUES (" . $vals . ");", $_values);
-    }*/
+        return $this->exec("INSERT INTO " . $_table . " (" . $cols . ") VALUES (" . $vals . ");", $_values);
+    }
 
     /** Met à jour un élément
      * @param array\Db $_values Le tableau de valeurs correspondant à la table courante. Doit contenir l'identifiant de la ligne à mettre à jour.
      * @return int Le nombre de lignes affectées
      */
-    /*static public function update(array $_values): int
+    public function update(string $_table, string $_pk, array $_values): int
     {
+        $id = null;
         $cols = [];
 
         foreach ($_values as $k => $v) {
-            $cols[$k] = ($k . '=:' . $k);
+            if($k !== $_pk) {
+                $cols[$k] = ($k . '=:' . $k);
+            }
+            else {
+                $id = $v;
+            }            
         }
 
-        return static::exec("UPDATE " . static::$tableName  . " SET " . \implode(', ', $cols) . " WHERE " . static::$pkName  . "=:" . static::$pkName  . ";", $_values);
-    }*/
+        if($id !== null) {
+            return $this->exec("UPDATE " . $_table  . " SET " . \implode(', ', $cols) . " WHERE " . $_pk  . "=:" . $id  . ";", $_values);
+        }
+    }
 
     /** Supprime un élément
      * @param int $_id L'identifiant de la ligne à supprimer

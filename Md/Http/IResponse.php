@@ -59,7 +59,7 @@ interface IResponse
     /**
      * Replace and set View for rendering 
      * @param IView|null $_data the view to use
-     * @return IView|null
+     * @return $this
      */
-    public function setView(?IView $_view): ?IView;
+    public function setView(?IView $_view): IResponse;
 }

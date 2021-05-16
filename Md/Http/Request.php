@@ -11,14 +11,16 @@ class Request implements IRequest
     private string $controller;
     private string $action;
     private ?string $id;
+    private string $view;
 
     public function __construct(array $_route)
     {
         $_route = Http::secure($_route);
         $this->method = mb_convert_case($_SERVER['REQUEST_METHOD'] ?? 'get', MB_CASE_LOWER);
-        $this->controller = mb_convert_case($_route[0] ?? 'home', MB_CASE_TITLE);
+        $this->controller = mb_convert_case($_route[0] ?? 'Home', MB_CASE_TITLE);
         $this->action = mb_convert_case($_route[1] ?? 'index', MB_CASE_LOWER);
         $this->id = ($_route[2] ?? null);
+        $this->view = ($this->controller.'/'.$this->action);
     }
 
     public function getMethod(): string
@@ -29,21 +31,6 @@ class Request implements IRequest
     public function getRoute(): string
     {
         return sprintf('%s/%s/%s', $this->controller, $this->action, $this->id);
-    }
-
-    public function getController(): string
-    {
-        return ($this->controller . 'Controller');
-    }
-
-    public function getAction(): string
-    {
-        return ($this->action . 'Action');
-    }
-
-    public function getId(): ?string
-    {
-        return $this->id;
     }
 
     public function getData(): array
@@ -70,5 +57,25 @@ class Request implements IRequest
                 return [];
             break;
         }
+    }
+
+    public function getController(): string
+    {
+        return ($this->controller . 'Controller');
+    }
+
+    public function getAction(): string
+    {
+        return ($this->action . 'Action');
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function getView(): string
+    {
+        return $this->view;
     }
 }

@@ -11,7 +11,6 @@ class Router implements IRouter
 {
     protected string $path;
     protected string $controller;
-    protected string $view;
     protected IRequest $request;
 
     public function __construct(string $_namespace, string $_path)
@@ -24,9 +23,7 @@ class Router implements IRouter
 
         $this->request = new Request($_route);
 
-        $this->controller = sprintf('%s\\Controllers\\%s', $_namespace, $this->request->getController());
-
-        $this->view = sprintf('%s/%s', basename($this->request->getController(), 'Controller'), basename($this->request->getAction(), 'Action'));
+        $this->controller = ('\\' . $_namespace . '\\Controllers\\' . $this->request->getController());
     }  
 
     public function getPath(): string
@@ -34,9 +31,9 @@ class Router implements IRouter
         return $this->path;
     }
 
-    public function getViewPath(): string
+    public function getViewsPath(): string
     {
-        return $this->view;
+        return ($this->path . '/Views/');
     }
 
     public function getRequest(): IRequest

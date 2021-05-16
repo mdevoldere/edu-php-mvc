@@ -3,33 +3,28 @@
 namespace Md\Http;
 
 
-use function array_map, explode, preg_match, http_response_code;
+use function array_map, header, http_response_code, preg_match;
 
+/**
+ * HTTP Operations
+ */
 class Http 
 {
-
-    static private IRequest $request;
-    static private IResponse $response;
-
+    /**
+     * Secure data in array
+     * Accept alphanumerics characters only
+     * @return array the input array whitout
+     * @todo Move method outside this class
+     */
     static public function secure(array $_data = []): array
     {
         return array_filter(array_map(function ($v) {
             if(!preg_match("/^[A-Za-z0-9]*$/", $v)) {
-                self::badRequest('Invalid request');
+                self::badRequest('Invalid data');
             }
             return $v;
            // return \preg_replace("/[^a-zA-Z0-9]/", "", \basename(\strip_tags($v), '.php'));
         }, $_data));
-    }
-
-    static public function getRequest(): IRequest 
-    {
-        return self::$request;
-    }
-
-    static public function getResponse(): IResponse 
-    {
-        return self::$response;
     }
 
     static public function end(int $_code = 500, string $data = 'Internal Error')
