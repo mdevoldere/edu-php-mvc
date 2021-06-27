@@ -20,7 +20,7 @@ class Response implements IResponse
     public function __construct()
     {
         $this->code = 200;
-        $this->contentType = IResponse::HTTP_JSON;
+        $this->contentType = IResponse::JSON;
         $this->data = [];
         $this->view = null;
     }
@@ -78,7 +78,7 @@ class Response implements IResponse
     public function setView(?IView $_view): IResponse
     {
         $this->view = $_view;
-        $this->contentType = ($_view !== null) ? IResponse::HTTP_HTML : IResponse::HTTP_JSON;
+        $this->contentType = ($_view !== null) ? IResponse::HTML : IResponse::JSON;
         return $this;
     }
 }

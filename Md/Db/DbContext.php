@@ -15,7 +15,7 @@ use Exception;
 class DbContext implements IDbContext 
 {
 
-    /** @var IDbContext[] $context */
+    /** @var IDbContext[] $context DbContext storage */
     static protected array $context = [];
 
     static public function getContext(string $_context = 'default') : ?IDbContext
@@ -23,13 +23,12 @@ class DbContext implements IDbContext
         return self::$context[$_context] ?? null;
     }
 
-    static public function setContext(string $_context, array $c): ?IDbContext
+    static public function setContext(string $_context, array $c): void
     {
         try {
             
             if (empty($c['db_type']) || empty($c['db_dsn'])) {
-                exit('Db Error 0');
-                return null;
+                return;
             }
 
             switch ($c['db_type']) {
@@ -53,23 +52,21 @@ class DbContext implements IDbContext
                     self::$context[$_context] = new DbContext($pdo);
                     break;
                 default:
-                    exit('Db Error 1');
+                    return;
                     break;
             }
 
-            return self::getContext($_context);
-
         } catch (Exception $e) {
-            exit('Db Error 10');
+            exit('DbContext Error');
         }
     }
 
 
     /**
-     * Retourne le jeu de résultat d'une requête SELECT exécutée
-     * @param PDOStatement $stmt Le jeu de résultat de la requête exécutée
-     * @param bool $_all true = retourne toutes les lignes trouvées. false = retourne la 1ère ligne trouvée
-     * @return array le jeu de résultat ou un tableau vide
+     * Get fetch result from executed prepared statement (SELECT queries only)
+     * @param PDOStatement $stmt the prepared statement already executed
+     * @param bool $_all true = return all lines. false = return first line
+     * @return array result set or empty array
      */
     static protected function fetchStmt(PDOStatement $stmt, bool $_all = false): array
     {
@@ -79,34 +76,37 @@ class DbContext implements IDbContext
     }
 
 
-    /** @var PDO $db Représente une connexion vers une base de données */
+    /** @var PDO $db PDO Connection */
     protected ?PDO $pdo = null;
 
 
+    /**
+     * DbContext Constructor
+     */
     public function __construct(PDO $_pdo) 
     {
         $this->pdo = $_pdo;
     }  
 
-    /** Exécute une requête de lecture simple 
-     * @param string $_query La requête SQL à exécuter 
-     * @param bool $_all true = retourne toutes les lignes trouvées. false = retourne la 1ère ligne trouvée 
-     * @return mixed Le jeu de résultat ou empty si aucun résultat 
+    /** Performs a simple read request 
+     * @param string $_query SQL query to execute 
+     * @param bool $_all true = return all rows. false = return first row
+     * @return mixed result set or empty array 
      */
     public function query(string $_query, bool $_all = false): array
     {
         try {
             return self::fetchStmt($this->pdo->query($_query), $_all);
         } catch (Exception $e) {
-            exit('Db Error 11');
+            exit('DbQuery Error');
         }
     }
 
-    /** Exécute une requête de lecture paramétrée
-     * @param string $_query La requête à exécuter
-     * @param array $_values Les paramètres de la requête
-     * @param bool $_all true = retourne toutes les lignes trouvées. false = retourne la 1er ligne trouvée
-     * @return mixed Le jeu de résultat ou empty si aucun résultat
+    /** Executes a parameterized read request
+     * @param string $_query SQL query to execute
+     * @param array $_values the values associated with the query parameters
+     * @param bool $_all true = return all rows. false = return first row
+     * @return mixed result set or empty array 
      */
     public function fetch(string $_query, array $_values = [], bool $_all = false): array
     {
@@ -114,14 +114,14 @@ class DbContext implements IDbContext
             $stmt = $this->pdo->prepare($_query);
             return ($stmt->execute($_values) ? static::fetchStmt($stmt, $_all) : []);
         } catch (Exception $e) {
-            exit('Db Error 100' . $e->getMessage());
+            exit('DbFetch Error' . $e->getMessage());
         }
     }
 
-    /** Exécute une requête de lecture paramétrée et retourne toutes les lignes trouvées 
-     * @param string $_query La requête à exécuter
-     * @param array $_values Les paramètres de la requête
-     * @return mixed Le jeu de résultat ou empty si aucun résultat
+    /** Execute a parameterized read request and return all rows  
+     * @param string $_query SQL query to execute
+     * @param array $_values the values associated with the query parameters
+     * @return mixed result set or empty array 
      */
     public function fetchAll(string $_query, array $_values = []): array
     {
@@ -129,10 +129,10 @@ class DbContext implements IDbContext
     }
 
 
-    /** Exécute une requête d'écriture paramétrée et retourne le nombre de lignes affectées
-     * @param string $_query La requête à exécuter
-     * @param array $_values Les paramètres de la requête
-     * @return int Le nombre de lignes affectées
+    /** Executes a parameterized write request and returns the number of rows affected
+     * @param string $_query SQL query to execute
+     * @param array $_values the values associated with the query parameters
+     * @return int number of rows affected by the query
      */
     public function exec(string $_query, array $_values = []): int
     {
@@ -151,9 +151,10 @@ class DbContext implements IDbContext
     }
 
 
-    /** Insère un nouvel élément
-     * @param array|Db $_values Le tableau de valeurs correspondant à la table courante
-     * @return int Le nombre de lignes affectées
+    /** Add data to specific table
+     * @param string $_table the table
+     * @param array $_values data to insert (must match to table structure)
+     * @return int number of rows affected
      */
     public function insert(string $_table, array $_values): int
     {
@@ -164,9 +165,11 @@ class DbContext implements IDbContext
         return $this->exec("INSERT INTO " . $_table . " (" . $cols . ") VALUES (" . $vals . ");", $_values);
     }
 
-    /** Met à jour un élément
-     * @param array\Db $_values Le tableau de valeurs correspondant à la table courante. Doit contenir l'identifiant de la ligne à mettre à jour.
-     * @return int Le nombre de lignes affectées
+    /** Update a row in specific table
+     * @param string $_table the table
+     * @param string $_pk the primary key name
+     * @param array $_values The array of values corresponding to the current table. Must contain the identifier of the row to update.
+     * @return int number of rows affected
      */
     public function update(string $_table, string $_pk, array $_values): int
     {
@@ -187,12 +190,14 @@ class DbContext implements IDbContext
         }
     }
 
-    /** Supprime un élément
-     * @param int $_id L'identifiant de la ligne à supprimer
-     * @return int Le nombre de lignes affectées
+    /** Delete a row in specific table
+     * @param string $_table the table
+     * @param string $_pk the primary key name
+     * @param string $_id row identifier
+     * @return int number of rows affected
      */
-    /*static public function delete($_id): int
+    public function delete(string $_table, string $_pk, string $_id): int
     {
-        return static::exec("DELETE FROM " . static::$tableName  . " WHERE " . static::$pkName  . "=:id;", [':id' => $_id]);
-    }*/
+        return $this->exec("DELETE FROM " . $_table  . " WHERE " . $_pk  . "=:id;", [':id' => $_id]);
+    }
 }

@@ -6,8 +6,8 @@ use Md\Views\IView;
 
 interface IResponse 
 {
-    public const HTTP_JSON = 'application/json; charset=utf-8';
-    public const HTTP_HTML = 'text/html';
+    public const JSON = 'application/json; charset=utf-8';
+    public const HTML = 'text/html';
     
     /**
      * Get Response HTTP Code

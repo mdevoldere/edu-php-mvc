@@ -10,32 +10,32 @@ namespace Md\Db;
  */
 interface IDbContext 
 {
-    /** Exécute une requête de lecture simple 
-     * @param string $_query La requête SQL à exécuter 
-     * @param bool $_all true = retourne toutes les lignes trouvées. false = retourne la 1ère ligne trouvée 
-     * @return array Le jeu de résultat ou empty si aucun résultat 
+    /** Performs a simple read request 
+     * @param string $_query SQL query to execute 
+     * @param bool $_all true = return all rows. false = return first row
+     * @return mixed result set or empty array 
      */
     public function query(string $_query, bool $_all = false): array;
 
-    /** Exécute une requête de lecture paramétrée
-     * @param string $_query La requête à exécuter
-     * @param array $_values Les paramètres de la requête
-     * @param bool $_all true = retourne toutes les lignes trouvées. false = retourne la 1er ligne trouvée
-     * @return array Le jeu de résultat ou empty si aucun résultat
+    /** Executes a parameterized read request
+     * @param string $_query SQL query to execute
+     * @param array $_values the values associated with the query parameters
+     * @param bool $_all true = return all rows. false = return first row
+     * @return mixed result set or empty array 
      */
     public function fetch(string $_query, array $_values = [], bool $_all = false): array;
 
-    /** Exécute une requête de lecture paramétrée et retourne toutes les lignes trouvées
-     * @param string $_query La requête à exécuter
-     * @param array $_values Les paramètres de la requête
-     * @return array Le jeu de résultat ou empty si aucun résultat
+    /** Execute a parameterized read request and return all rows  
+     * @param string $_query SQL query to execute
+     * @param array $_values the values associated with the query parameters
+     * @return mixed result set or empty array 
      */
     public function fetchAll(string $_query, array $_values = []): array;
 
-    /** Exécute une requête d'écriture paramétrée
-     * @param string $_query La requête à exécuter
-     * @param array $_values Les paramètres de la requête
-     * @return int Le nombre de lignes affectées
+    /** Executes a parameterized write request and returns the number of rows affected
+     * @param string $_query SQL query to execute
+     * @param array $_values the values associated with the query parameters
+     * @return int number of rows affected by the query
      */
     public function exec(string $_query, array $_values = []): int;
 }

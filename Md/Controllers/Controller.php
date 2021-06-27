@@ -54,26 +54,21 @@ abstract class Controller implements IController
         }
 
         $this->{$a}();
-
-        if($this->view === false) {
-            return $this->response;
-        }
-
-        $layout = new View($this->router->getViewsPath()); 
-        $layout->setFile('_layout');
-        $layout->setChild('page', $this->request->getView());  
-        $this->response->setView($layout);    
+          
         return $this->response;
     }
 
     /**
      * Set Generic Repository from table name and primary key name 
-     * Remember to open the connection with DbContext before use any repo
+     * Remember to open the default connection with DbContext before use any generic repo
      */
     public function setRepository(string $_table, string $_pk)
     {
         $this->repo = new Repository($_table, $_pk);
     }
 
+    /**
+     * Default Controller Action
+     */
     abstract public function indexAction(): void;
 }

@@ -33,7 +33,7 @@ class Router implements IRouter
 
     public function getViewsPath(): string
     {
-        return ($this->path . '/Views/');
+        return ($this->path . 'Views/');
     }
 
     public function getRequest(): IRequest
