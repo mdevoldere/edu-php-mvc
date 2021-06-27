@@ -3,47 +3,37 @@
 namespace Md\Http;
 
 use Md\Controllers\IController;
-use Md\Loader;
 
-use function basename, str_replace, explode, trim, sprintf;
+use function dirname, explode, str_replace, trim;
 
 class Router implements IRouter 
 {
-    protected string $path;
-    protected string $controller;
-    protected IRequest $request;
+    protected IController $controller;
+    protected IResponse $response;
 
     public function __construct(string $_namespace, string $_path)
     {
-        $this->path = (dirname($_path) . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $_namespace) . DIRECTORY_SEPARATOR);
-
         $_route = str_replace('//', '/', $_SERVER['REQUEST_URI']);
         $_route = explode('?', $_route)[0] ?? '/';
         $_route = explode('/', trim($_route, '/'));     
-
-        $this->request = new Request($_route);
-
-        $this->controller = ('\\' . $_namespace . '\\Controllers\\' . $this->request->getController());
+        $request = new Request($_route, (dirname($_path) . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $_namespace) . DIRECTORY_SEPARATOR));
+        $this->response = new Response($request);
+        $ctrl = ('\\' . $_namespace . '\\Controllers\\' . $request->getController());
+        $this->controller = new $ctrl($this->response);
     }  
-
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    public function getViewsPath(): string
-    {
-        return ($this->path . 'Views/');
-    }
 
     public function getRequest(): IRequest
     {
-        return $this->request;
+        return $this->response->getRequest();
     }
 
-    public function getController(): ?IController
+    public function getResponse(): IResponse
     {
-        return (new $this->controller($this));
+        return $this->response;
     }
-    
+
+    public function getController(): IController
+    {
+        return $this->controller;
+    }
 }

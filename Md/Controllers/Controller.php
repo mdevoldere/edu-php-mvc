@@ -6,7 +6,6 @@ use Md\Db\IRepository;
 use Md\Db\Repository;
 use Md\Http\IRequest;
 use Md\Http\IResponse;
-use Md\Http\IRouter;
 use Md\Http\Response;
 use Md\Views\View;
 
@@ -15,9 +14,6 @@ use Md\Views\View;
  */
 abstract class Controller implements IController
 {
-    /** @var IRouter $router The router used by current App */
-    protected IRouter $router; 
-
     /** @var IRequest $request The HTTP request extracted from $router */
     protected IRequest $request;
 
@@ -27,48 +23,58 @@ abstract class Controller implements IController
     /** @var null|IRepository $repo The Repository to use or null if no repository */
     protected ?IRepository $repo;
 
-    /** @var bool $view defines if a view should be loaded (true) */
-    protected bool $view;
+    /** @var array $data Data sent to response */
+    protected array $data;
 
-    public function __construct(IRouter $_router)
+    public function __construct(IResponse $_response)
     {
-        $this->router = $_router;
-        $this->request = $_router->getRequest();
-        $this->response = new Response();
+        $this->request = $_response->getRequest();
+        $this->response = $_response;
         $this->repo = null;
-        $this->view = false;
+        $this->data = [];
         $this->init();
     }
+    
+    /**
+     * Default Controller Action
+     */
+    abstract public function indexAction(): void;
 
-    protected function init() 
-    {
-        
-    }
+    /**
+     * Load custom components
+     */
+    protected function init() {}
 
+    /**
+     * Handle current request
+     */
     public function handleRequest(): IResponse
     {
         $a = $this->request->getAction();
 
         if(!method_exists($this, $a)) {
-            return $this->response->setCode(404)->addData('error', 'Invalid Action');
+            return $this->response->setCode(404)->setBody('Error : Invalid Action');
         }
 
         $this->{$a}();
-          
-        return $this->response;
+
+        if($this->response->getContentType() === IResponse::JSON) {
+            return $this->response->setBody(json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+
+        $layout = new View($this->request->getLocalPath('Views/')); 
+        $layout->setFile('_layout');
+        $layout->setChild('page', $this->request->getView());  
+        return $this->response->setBody($layout->fetch($this->data));  
     }
 
     /**
      * Set Generic Repository from table name and primary key name 
-     * Remember to open the default connection with DbContext before use any generic repo
+     * Remember to set the "default" connection with DbContext before use any generic repo
      */
     public function setRepository(string $_table, string $_pk)
     {
         $this->repo = new Repository($_table, $_pk);
     }
 
-    /**
-     * Default Controller Action
-     */
-    abstract public function indexAction(): void;
 }

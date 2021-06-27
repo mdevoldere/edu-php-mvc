@@ -10,6 +10,12 @@ interface IResponse
     public const HTML = 'text/html';
     
     /**
+     * Get associated Request
+     * @return string the request
+     */
+    public function getRequest(): IRequest;
+    
+    /**
      * Get Response HTTP Code
      * @return int the response http code
      */
@@ -29,37 +35,22 @@ interface IResponse
     public function getContentType(): string;
 
     /**
+     * Set Response Content-Type
+     * @param string $_contentType
+     * @return self
+     */
+    public function setContentType(string $_contentType): IResponse;
+
+    /**
      * Get Response Body
      * @return string the response body
      */
     public function getBody(): string;
 
-    /**
-     * Replace and set Response data 
-     * @param array $_data the new response data
-     * @return $this
+     /**
+     * Set Response Body
+     * @param string $_body
+     * @return self
      */
-    public function setData(array $_data): IResponse;
-
-    /**
-     * Append data to current Response
-     * @param array $_data data to append to the current response
-     * @return $this
-     */
-    public function appendData(array $_data): IResponse;
-
-    /**
-     * Add 1 value to current Response data (if key already exists, replace data)
-     * @param string $_key the key for the value to add
-     * @param mixed $_value the associated value
-     * @return $this
-     */
-    public function addData(string $_key, $_value): IResponse;
-
-    /**
-     * Replace and set View for rendering 
-     * @param IView|null $_data the view to use
-     * @return $this
-     */
-    public function setView(?IView $_view): IResponse;
+    public function setBody(string $_body): IResponse;
 }

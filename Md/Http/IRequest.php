@@ -11,6 +11,8 @@ namespace Md\Http;
  * @method string getController()
  * @method string getAction()
  * @method null|string getId()
+ * @method string getView()
+ * @method string getLocalPath()
  */
 interface IRequest 
 {
@@ -58,4 +60,11 @@ interface IRequest
      * @return string the view relative path
      */
     public function getView(): string;
+
+    /**
+     * Get App absolute path
+     * @param null|string $_subpath
+     * @return string the app absolute path
+     */
+    public function getLocalPath(?string $_subpath): string;
 }

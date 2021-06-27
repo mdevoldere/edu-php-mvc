@@ -9,15 +9,13 @@ use Md\Controllers\IController;
  * 
  * Map Http Request with Local System 
  * 
- * @method string getPath() get current App local path
- * @method string getViewsPath() get current App Views path (relative to getPath())
- * @method IRequest getRequest() get current Http Request 
  * @method null|IController getController() get controller using current Http Request
+ * @method IRequest getRequest() get current Http Request 
+ * @method IResponse getResponse() get current Http Reponse 
  */
 interface IRouter 
 {
-    public function getPath(): string;
-    public function getViewsPath(): string;
-    public function getRequest(): IRequest;
     public function getController(): ?IController;
+    public function getRequest(): IRequest;
+    public function getResponse(): IResponse;
 }

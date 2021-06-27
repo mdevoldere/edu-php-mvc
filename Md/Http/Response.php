@@ -13,17 +13,22 @@ class Response implements IResponse
 
     private string $contentType;
 
-    private array $data;
+    private IRequest $request;
 
-    private ?View $view;
+    private string $body;
 
-    public function __construct()
+    public function __construct(IRequest $_request)
     {
         $this->code = 200;
         $this->contentType = IResponse::JSON;
-        $this->data = [];
-        $this->view = null;
+        $this->request = $_request;
+        $this->body = "";
     }
+
+    public function getRequest(): IRequest
+    {
+        return $this->request;
+    }  
 
     public function getCode(): int
     {
@@ -41,44 +46,20 @@ class Response implements IResponse
         return $this->contentType;
     }
 
+    public function setContentType(string $_contentType): IResponse
+    {
+        $this->contentType = $_contentType;
+        return $this;
+    }
+
     public function getBody(): string
-    {
-        if($this->view === null) {
-            return json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-        }
-        
-        return $this->view->fetch($this->data);        
+    {        
+        return $this->body;        
     }
 
-    public function getData(): array
+    public function setBody(string $_body): IResponse
     {
-        return $this->data;
-    }
-
-    public function setData(array $_data = []): IResponse
-    {
-        $this->data = $_data;
+        $this->body = $_body;
         return $this;
-    }
-
-    public function appendData(array $_data = []): IResponse
-    {
-        foreach($_data as $k => $v) {
-            $this->addData($k, $v);
-        }
-        return $this;
-    }
-
-    public function addData(string $_key, $_value = null): IResponse
-    {
-        $this->data[$_key] = $_value;
-        return $this;
-    }
-
-    public function setView(?IView $_view): IResponse
-    {
-        $this->view = $_view;
-        $this->contentType = ($_view !== null) ? IResponse::HTML : IResponse::JSON;
-        return $this;
-    }
+    }  
 }
