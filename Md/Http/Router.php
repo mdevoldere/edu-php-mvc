@@ -2,6 +2,7 @@
 
 namespace Md\Http;
 
+use Exception;
 use Md\Controllers\IController;
 
 use function dirname, explode, str_replace, trim;
@@ -33,6 +34,11 @@ class Router implements IRouter
 
     public function getController(): IController
     {
-        return new $this->controller($this->response);
+        try {
+            return new $this->controller($this->response);
+        } catch(Exception $e) {
+            exit('Error : Invalid controller');
+        }
+        
     }
 }
