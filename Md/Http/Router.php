@@ -8,7 +8,7 @@ use function dirname, explode, str_replace, trim;
 
 class Router implements IRouter 
 {
-    protected IController $controller;
+    protected string $controller;
     protected IResponse $response;
 
     public function __construct(string $_namespace, string $_path)
@@ -18,8 +18,7 @@ class Router implements IRouter
         $_route = explode('/', trim($_route, '/'));     
         $request = new Request($_route, (dirname($_path) . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $_namespace) . DIRECTORY_SEPARATOR));
         $this->response = new Response($request);
-        $ctrl = ('\\' . $_namespace . '\\Controllers\\' . $request->getController());
-        $this->controller = new $ctrl($this->response);
+        $this->controller = ('\\' . $_namespace . '\\Controllers\\' . $request->getController());
     }  
 
     public function getRequest(): IRequest
@@ -34,6 +33,6 @@ class Router implements IRouter
 
     public function getController(): IController
     {
-        return $this->controller;
+        return new $this->controller($this->response);
     }
 }
