@@ -34,7 +34,7 @@ class View implements IView
     public function setFile(string $_filename): IView
     {
         $this->file = ($this->path.$_filename.'.php');
-        // echo ('<pre>'.var_export($this, true));
+        
         if(!\is_file($this->file)) {
             Http::notFound('invalid view ('.$_filename.')');
         }
@@ -57,9 +57,7 @@ class View implements IView
 
     public function setChild(string $_key, string $_filename): IView
     {
-        $v = new self($this->path);
-        $v->setFile($_filename);
-        $this->childs[$_key] = $v;
-        return $v;
+        $this->childs[$_key] = (new self($this->path))->setFile($_filename);
+        return $this->childs[$_key];
     }
 }

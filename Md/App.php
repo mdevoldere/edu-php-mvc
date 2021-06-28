@@ -2,9 +2,9 @@
 
 namespace Md;
 
-use Md\Controllers\IController;
 use Md\Db\DbContext;
 use Md\Http\Http;
+use Md\Http\IRequest;
 use Md\Http\IRouter;
 
 /**
@@ -21,28 +21,18 @@ class App
      */
     final static public function run(IRouter $_router): void
     {   
-        self::handleDatabases($_router);
+        self::handleDatabases($_router->getRequest());
 
-        if(null !== ($c = static::handleController($_router))) {
+        if(null !== ($c = $_router->getController())) {
             Http::response($c->handleRequest());
         }
 
         Http::notFound('invalid controller');
     }
 
-    /**
-     * Load Controller from given IRouter
-     * @param IRouter $_router the IRouter object to use
-     * @return IController|null the loaded IController or null if not found
-     */
-    static protected function handleController(IRouter $_router): ?IController 
+    static protected function handleDatabases(IRequest $_request) : void
     {
-        return $_router->getController();
-    }
-
-    static protected function handleDatabases(IRouter $_router) : void
-    {
-        $f = ($_router->getPath().'var/db.conf.php');
+        $f = ($_request->getLocalPath().'var/db.conf.php');
 
         if(is_file($f)) {
             $a = require $f;
