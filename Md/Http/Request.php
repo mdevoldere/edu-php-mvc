@@ -73,7 +73,7 @@ class Request implements IRequest
         return $this->id;
     }
 
-    public function getLocalPath(?string $_subpath): string 
+    public function getLocalPath(?string $_subpath = null): string 
     {
         return $this->localPath . ($_subpath);
     }
