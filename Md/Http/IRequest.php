@@ -66,5 +66,5 @@ interface IRequest
      * @param null|string $_subpath
      * @return string the app absolute path
      */
-    public function getLocalPath(?string $_subpath): string;
+    public function getLocalPath(?string $_subpath = null): string;
 }
