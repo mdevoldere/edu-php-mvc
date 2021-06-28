@@ -7,6 +7,8 @@ use Md\Http\Http;
 use Md\Http\IRequest;
 use Md\Http\IRouter;
 
+use function dirname, is_file;
+
 /**
  * MD MVC App Launcher
  * 
@@ -32,7 +34,7 @@ class App
 
     static protected function handleDatabases(IRequest $_request) : void
     {
-        $f = ($_request->getLocalPath().'var/db.conf.php');
+        $f = (dirname($_request->getLocalPath()).'/var/db.conf.php');
 
         if(is_file($f)) {
             $a = require $f;
