@@ -34,7 +34,7 @@ class App
 
     static protected function handleDatabases(IRequest $_request) : void
     {
-        $f = (dirname($_request->getLocalPath()).'/var/db.conf.php');
+        $f = $_request->getLocalPath('var/db.conf.php');
 
         if(is_file($f)) {
             $a = require $f;

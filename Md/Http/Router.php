@@ -34,6 +34,8 @@ class Router implements IRouter
 
     public function getController(): IController
     {
+        $c = str_replace('\\', '/', $this->controller);
+        if(!is_file($this->getRequest()->getLocalPath($c)))
         try {
             return new $this->controller($this->response);
         } catch(Exception $e) {

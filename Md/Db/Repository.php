@@ -4,7 +4,7 @@ namespace Md\Db;
 
 use function basename;
 
-class Repository implements Irepository
+class Repository implements IRepository
 {
 
     public string $table;
