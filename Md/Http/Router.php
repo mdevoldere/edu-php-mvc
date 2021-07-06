@@ -41,7 +41,7 @@ class Router implements IRouter
     public function getController(): IController
     {
         $c = str_replace('\\', '/', $this->controller);
-        if(!is_file($this->getRequest()->getLocalPath($c))) {
+        if(!is_file(dirname($this->getRequest()->getLocalPath()) . '/' . $c)) {
             exit('ko');
         }
         try {
