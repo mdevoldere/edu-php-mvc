@@ -16,12 +16,12 @@ class Router implements IRouter
     {
         $_route = str_replace('//', '/', $_SERVER['REQUEST_URI']);
         $_route = explode('?', $_route)[0] ?? '/';
-        $_route = trim($_route, '/');
 
         if($_baseUrl !== '/') {
             $_route = str_replace($_baseUrl, '', $_route);
         }
 
+        $_route = trim($_route, '/');
         $_route = explode('/', $_route);     
         $request = new Request($_route, (dirname($_path) . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $_namespace) . DIRECTORY_SEPARATOR));
         $this->response = new Response($request);
@@ -41,7 +41,7 @@ class Router implements IRouter
     public function getController(): IController
     {
         $c = str_replace('\\', '/', $this->controller);
-        if(!is_file(dirname($this->getRequest()->getLocalPath()) . '/' . $c)) {
+        if(!is_file(dirname($this->getRequest()->getLocalPath()) . $c . '.php')) {
             exit('ko');
         }
         try {
