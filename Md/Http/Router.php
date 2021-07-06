@@ -12,11 +12,17 @@ class Router implements IRouter
     protected string $controller;
     protected IResponse $response;
 
-    public function __construct(string $_namespace, string $_path)
+    public function __construct(string $_namespace, string $_path, string $_baseUrl = '/')
     {
         $_route = str_replace('//', '/', $_SERVER['REQUEST_URI']);
         $_route = explode('?', $_route)[0] ?? '/';
-        $_route = explode('/', trim($_route, '/'));     
+        $_route = trim($_route, '/');
+
+        if($_baseUrl !== '/') {
+            $_route = str_replace($_baseUrl, '', $_route);
+        }
+
+        $_route = explode('/', $_route);     
         $request = new Request($_route, (dirname($_path) . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $_namespace) . DIRECTORY_SEPARATOR));
         $this->response = new Response($request);
         $this->controller = ('\\' . $_namespace . '\\Controllers\\' . $request->getController());
