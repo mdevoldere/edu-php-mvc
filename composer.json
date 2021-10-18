@@ -16,16 +16,21 @@
     "repositories": [
         {
             "type": "vcs",
+            "url": "https://github.com/mdevoldere/edu-php-db.git"
+        },
+        {
+            "type": "vcs",
             "url": "https://github.com/mdevoldere/edu-php-mvc.git"
         }
     ],
     "require": {
         "php" : ">=7.4",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "mdevoldere/edu-php-db": "dev-mdev"
     },
     "autoload": {
         "psr-4": {
-          "Md\\": "Md"
+            "Md\\": ""
         }
       }
 }

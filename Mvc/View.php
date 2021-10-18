@@ -1,10 +1,10 @@
 <?php
 
-namespace Md\Views;
+namespace Md\Mvc;
 
 use Md\Http\Http;
 
-class View implements IView
+class View implements ViewInterface
 {
     static protected array $vars = [];
 
@@ -31,7 +31,7 @@ class View implements IView
         $this->childs = [];
     }
 
-    public function setFile(string $_filename): IView
+    public function setFile(string $_filename): ViewInterface
     {
         $this->file = ($this->path.$_filename.'.php');
         
@@ -55,7 +55,7 @@ class View implements IView
         return \ob_get_clean();
     }
 
-    public function setChild(string $_key, string $_filename): IView
+    public function setChild(string $_key, string $_filename): ViewInterface
     {
         $this->childs[$_key] = (new self($this->path))->setFile($_filename);
         return $this->childs[$_key];

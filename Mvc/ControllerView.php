@@ -1,6 +1,6 @@
 <?php 
 
-namespace Md\Controllers;
+namespace Md\Mvc;
 
 use Md\Db\IRepository;
 use Md\Db\Repository;
